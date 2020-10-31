@@ -1,6 +1,6 @@
 #!/bin/env python3
-# using regex module to parse, and os to delete
-import re, os
+# using regex module to parse, os to delete, and sys to parse args
+import re, os, sys
 
 # regex to match the error files located inside xml
 regex = re.compile(r"""
@@ -10,7 +10,10 @@ regex = re.compile(r"""
 """, re.VERBOSE)
 
 # input path of the error log (TODO change if stdin needed)
-input_path = './testregex.txt'
+if len(sys.argv) > 1:
+    input_path = sys.argv[1]
+else:
+    input_path = 'testregex.txt'
 
 # open filestream and read in content
 file_input= open(input_path, 'r', encoding='utf-8')
@@ -23,18 +26,16 @@ file_regexed = regex.findall(file_text)
 clean_file_regexed = list(dict.fromkeys(file_regexed))
 
 # Print all matches
-print(">  Files parsed for error")
+print("---->  Files parsed for error")
 print(clean_file_regexed)
 
 # ---------------------------------
 # FOR TESTING TOUCH ALL FILES FIRST
-print(">  Touching files for test")
+print("---->  Touching files for test")
 for file in file_regexed:
     f = open(file, "w")
     f.close()
-
-
-print(">  Current directory")
+print("---->  Current directory")
 print(os.listdir())
 # ---------------------------------
 
@@ -42,9 +43,8 @@ print(os.listdir())
 for file in clean_file_regexed:
     os.remove(file)
 
-
 # ---------------------------------
-# FOR TESTING DISPLAY dir
-print(">  Directory after")
+# FOR TESTING DISPLAY DIR
+print("---->  Directory after")
 print(os.listdir())
 # ---------------------------------
